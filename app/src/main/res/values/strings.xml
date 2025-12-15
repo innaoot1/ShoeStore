@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Trifonova_Practica</string>
+    <string name="register_title">Регистрация</string>
+    <string name="name_hint">Имя</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Пароль</string>
+    <string name="terms_text">Я согласен с Условиями и политикой конфиденциальности</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="have_account">Уже есть аккаунт?</string>
+    <string name="login_link">Войти</string>
+    <string name="error_invalid_email">Неверный формат email</string>
+    <string name="error_empty_field">Поле не может быть пустым</string>
+    <string name="error_terms">Необходимо согласиться с условиями</string>
+    <string name="loading">Загрузка...</string>
+</resources>
