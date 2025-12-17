@@ -180,28 +180,28 @@ object AppTypography {
     val bodyRegular16 = TextStyle(
         fontFamily = ralewayRegular,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 19.sp,
         lineHeight = 20.sp
     )
 
     val bodyMedium14 = TextStyle(
         fontFamily = ralewayMedium,
         fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 18.sp
+        fontSize = 19.sp,
+        lineHeight = 20.sp
     )
 
     val bodyRegular14 = TextStyle(
         fontFamily = ralewayRegular,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 18.sp
+        fontSize = 18.sp,
+        lineHeight = 19.sp
     )
 
     val bodyRegular12 = TextStyle(
         fontFamily = ralewayRegular,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
+        fontSize = 18.sp,
+        lineHeight = 19.sp
     )
 }

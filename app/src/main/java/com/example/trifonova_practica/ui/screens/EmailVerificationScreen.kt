@@ -82,7 +82,7 @@ fun EmailVerificationScreen(
     ) {
         // Заголовок
         Text(
-            text = "Verify Your Email",
+            text = "Верифицируйте свою почту",
             style = MaterialTheme.typography.headlineLarge,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
@@ -91,7 +91,7 @@ fun EmailVerificationScreen(
 
         // Информационное сообщение
         Text(
-            text = "We sent a 6-digit verification code to:",
+            text = "Мы отправили 6-значный проверочный код по адресу",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -100,7 +100,7 @@ fun EmailVerificationScreen(
 
         // Email пользователя
         Text(
-            text = userEmail.ifEmpty { "your email" },
+            text = userEmail.ifEmpty { "Ваш email" },
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
             color = Color(0xFF0560FA),
@@ -110,7 +110,7 @@ fun EmailVerificationScreen(
 
         // Поле для OTP кода
         Text(
-            text = "Enter OTP Code",
+            text = "Получить OTP Код",
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -134,24 +134,15 @@ fun EmailVerificationScreen(
             )
         )
 
-        // Подсказка под полем OTP
-        Text(
-            text = "Enter the 6-digit code from your email",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color(0xFFA7A7A7),
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-        Spacer(modifier = Modifier.height(80.dp))
-
         DisableButton(
             text = stringResource(id = R.string.verify),
             onClick = {
                 if (otpCode.length == 6 && userEmail.isNotEmpty()) {
                     viewModel.verifyOtp(userEmail, otpCode)
                 } else if (userEmail.isEmpty()) {
-                    Toast.makeText(context, "Email not found. Please sign up again.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Адрес электронной почты не найден. Пожалуйста, зарегистрируйтесь еще раз.", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(context, "Please enter 6-digit OTP code", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Пожалуйста введите OTP code", Toast.LENGTH_LONG).show()
                 }
             },
             textStyle = AppTypography.bodyMedium16
@@ -171,10 +162,10 @@ fun EmailVerificationScreen(
                 Text(
                     buildAnnotatedString {
                         withStyle(style = SpanStyle(color = Color(0xFFA7A7A7))) {
-                            append("Already verified? ")
+                            append("Уже верифицировали? ")
                         }
-                        withStyle(style = SpanStyle(color = Color(0xFF0560FA))) {
-                            append("Sign In")
+                        withStyle(style = SpanStyle(color = Color(0xFFA7A7A7))) {
+                            append("Вход")
                         }
                     },
                     fontSize = 14.sp

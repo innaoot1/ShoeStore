@@ -122,15 +122,17 @@ fun SignInScreen(
             text = stringResource(id = R.string.email),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 20.dp)
         )
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            modifier = Modifier
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
                 .fillMaxWidth()
-                .padding(bottom = 20.dp),
+                .padding(bottom = 20.dp)
+                .padding(horizontal = 20.dp),
             shape = MaterialTheme.shapes.medium,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = OutlinedTextFieldDefaults.colors(
@@ -153,7 +155,8 @@ fun SignInScreen(
             text = stringResource(id = R.string.pass),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 20.dp)
         )
 
         OutlinedTextField(
@@ -165,8 +168,9 @@ fun SignInScreen(
                 PasswordVisualTransformation()
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .fillMaxWidth()
+            .padding(horizontal = 20.dp),
             shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = borderColor,

@@ -161,7 +161,8 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.name),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 20.dp)
         )
 
         OutlinedTextField(
@@ -169,7 +170,8 @@ fun RegisterAccountScreen(
             onValueChange = { name = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp),
+                .padding(bottom = 20.dp)
+                .padding(horizontal = 20.dp),
             shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = borderColor,
@@ -191,7 +193,8 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.email),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 20.dp)
         )
 
         OutlinedTextField(
@@ -199,7 +202,9 @@ fun RegisterAccountScreen(
             onValueChange = { email = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp),
+                .padding(bottom = 20.dp)
+            .padding(horizontal = 20.dp),
+
             shape = MaterialTheme.shapes.medium,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = OutlinedTextFieldDefaults.colors(
@@ -222,7 +227,10 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.pass),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 20.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+
+                .padding(horizontal = 20.dp)
+
         )
 
         OutlinedTextField(
@@ -236,7 +244,8 @@ fun RegisterAccountScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp),
+                .padding(bottom = 20.dp, top = 10.dp)
+            .padding(horizontal = 20.dp),
             shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = borderColor,
@@ -339,7 +348,7 @@ fun RegisterAccountScreen(
                 } else {
                     // Валидация полей
                     errorMessage = when {
-                        name.isEmpty() -> "Please enter your name"
+                        name.isEmpty() -> "Пожалуйста введите ваше имя"
                         email.isEmpty() -> "Please enter your email address"
                         password.isEmpty() -> "Please enter your password"
                         !isChecked -> "Please accept the terms and conditions"
@@ -367,7 +376,7 @@ fun RegisterAccountScreen(
                     buildAnnotatedString {
                         withStyle(
                             style = SpanStyle(
-                                color = MaterialTheme.colorScheme.onBackground,
+                                color = MaterialTheme.colorScheme.tertiary,
                                 fontFamily = AppTypography.bodyRegular16.fontFamily,
                                 fontSize = AppTypography.bodyRegular16.fontSize
                             )
@@ -377,7 +386,7 @@ fun RegisterAccountScreen(
                         append(" ")
                         withStyle(
                             style = SpanStyle(
-                                color = MaterialTheme.colorScheme.onSurface,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 fontFamily = AppTypography.bodyRegular16.fontFamily,
                                 fontSize = AppTypography.bodyRegular16.fontSize,
                             )
