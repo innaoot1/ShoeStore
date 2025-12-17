@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.trifonova_practica.ui.screens.RegisterAccountScreen
 import com.example.trifonova_practica.ui.screens.SignInScreen
 import com.example.trifonova_practica.ui.screens.EmailVerificationScreen
-import com.example.trifonova_practica.ui.screens.HomeScreen
+
 
 @Composable
 fun NavigationApp(navController: NavHostController) {
@@ -40,4 +40,9 @@ fun NavigationApp(navController: NavHostController) {
             HomeScreen()
         }
     }
+}
+
+@Composable
+fun HomeScreen() {
+    TODO("Not yet implemented")
 }

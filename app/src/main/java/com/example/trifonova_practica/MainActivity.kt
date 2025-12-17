@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.trifonova_practica.data.navigation.NavigationApp
+import com.example.trifonova_practica.ui.screens.SolidColorScreenWithIcon
 import com.example.trifonova_practica.ui.theme.ShoeShopTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,5 +19,13 @@ class MainActivity : ComponentActivity() {
                 NavigationApp(navController = navController)
             }
         }
+    } class MainActivity : ComponentActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContent {
+                SolidColorScreenWithIcon()  // вызываем нашу функцию
+            }
+        }
     }
+
 }
