@@ -167,13 +167,6 @@ fun RegisterAccountScreen(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            placeholder = {
-                Text(
-                    "xxxxxxxx",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
@@ -204,13 +197,6 @@ fun RegisterAccountScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = {
-                Text(
-                    "......@mail.com",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
@@ -236,19 +222,12 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.pass),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp)
         )
 
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = {
-                Text(
-                    "......",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             visualTransformation = if (passwordVisible) {
                 VisualTransformation.None
             } else {
@@ -331,7 +310,7 @@ fun RegisterAccountScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.policy_check),
                         contentDescription = "Выбрано",
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(50.dp),
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }

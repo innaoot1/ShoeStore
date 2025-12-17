@@ -128,13 +128,6 @@ fun SignInScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = {
-                Text(
-                    "......@mail.com",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
@@ -166,13 +159,6 @@ fun SignInScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = {
-                Text(
-                    "......",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             visualTransformation = if (passwordVisible) {
                 VisualTransformation.None
             } else {

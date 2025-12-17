@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.firebase.components)
     implementation(libs.androidx.tracing.perfetto.handshake)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     implementation(libs.gson)
     implementation(libs.navigation.compose)
