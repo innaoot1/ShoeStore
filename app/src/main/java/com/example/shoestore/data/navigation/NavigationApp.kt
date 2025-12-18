@@ -4,17 +4,27 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.shoestore.ui.screens.* // Импортируем все экраны
+import com.example.shoestore.ui.screens.*
 
 @Composable
-fun NavigationApp(navController: NavHostController) {
+fun NavigationApp(
+    navController: NavHostController,
+    startDestination: String,
+    onOnboardingFinished: () -> Unit
+) {
     NavHost(
         navController = navController,
-        startDestination = "start_menu"
+        startDestination = startDestination
     ) {
+
         composable("start_menu") {
             OnboardScreen(
-                onGetStartedClick = { navController.navigate("sign_up") },
+                onGetStartedClick = {
+                    onOnboardingFinished()
+                    navController.navigate("sign_up") {
+                        popUpTo("start_menu") { inclusive = true }
+                    }
+                }
             )
         }
 
@@ -31,7 +41,6 @@ fun NavigationApp(navController: NavHostController) {
                 onSignUpClick = { navController.navigate("sign_up") },
                 onSignInClick = {
                     navController.navigate("home") {
-                        // Очищаем стек, чтобы нельзя было вернуться на экран входа
                         popUpTo("sign_in") { inclusive = true }
                     }
                 }
@@ -71,24 +80,50 @@ fun NavigationApp(navController: NavHostController) {
             )
         }
 
-        // ЭКРАН HOME (Пункт 9)
         composable("home") {
             HomeScreen(
                 onProductClick = { product ->
-                    // Здесь будет переход на детали товара: navController.navigate("details/${product.id}")
                 },
-                onCartClick = { /* Переход в корзину */ },
-                onSearchClick = { /* Логика поиска */ },
-                onSettingsClick = {
-                    // Переход в профиль (связываем меню с экраном профиля)
-                    navController.navigate("profile")
+                onCartClick = { /* ... */ },
+                onSearchClick = { /* ... */ },
+                onSettingsClick = { /* ... */ },
+                onProfileEditClick = { navController.navigate("edit_profile") },
+                onProfileLogoutClick = {
+                    navController.navigate("sign_in") {
+                        popUpTo("home") { inclusive = true }
+                    }
+                },
+                onOpenCatalog = {
+                    navController.navigate("catalog")
                 }
             )
         }
 
-        // ЭКРАН PROFILE (Пункт 12)
         composable("profile") {
-            ProfileScreen()
+            ProfileScreen(
+                onEditClick = { navController.navigate("edit_profile") },
+                onBackClick = { navController.popBackStack() },
+                onLogoutClick = {
+                    navController.navigate("sign_in") {
+                        popUpTo("home") { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable("edit_profile") {
+            EditProfileScreen(
+                onBackClick = { navController.popBackStack() },
+                onSaveSuccess = { navController.popBackStack() }
+            )
+        }
+
+        composable("catalog") {
+            CatalogScreen(
+                onProductClick = { product ->
+                    navController.navigate("details/${product.id}")
+                }
+            )
         }
     }
 }

@@ -23,7 +23,7 @@ class ForgotPasswordViewModel : ViewModel() {
         viewModelScope.launch {
             _state.value = ForgotPasswordState.Loading
             try {
-                val response = RetrofitInstance.userManagementService.resetPassword(mapOf("email" to email))
+                val response = RetrofitInstance.userManagementService.resetPassword(mapOf("email" to email) as MutableMap<String, String>)
 
                 if (response.isSuccessful) {
                     Log.d("ForgotPassword", "Письмо отправлено на $email")

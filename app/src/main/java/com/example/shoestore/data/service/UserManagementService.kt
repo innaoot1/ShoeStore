@@ -1,17 +1,24 @@
 package com.example.shoestore.data.service
 
+import com.example.shoestore.data.model.FavouriteDto
+import com.example.shoestore.data.model.ProductDto
 import com.example.shoestore.data.model.SignInRequest
 import com.example.shoestore.data.model.SignInResponse
 import com.example.shoestore.data.model.SignUpRequest
 import com.example.shoestore.data.model.SignUpResponse
+import com.example.shoestore.data.model.UserProfile
 import com.example.shoestore.data.model.VerifyOtpRequest
 import com.example.shoestore.data.model.VerifyOtpResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Query
 
 const val API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1dGpkZ2dpem92aWJtemphdm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MTA4MTcsImV4cCI6MjA4MDE4NjgxN30.2S7E8a_guM1LnmJmk9jKefcfZE4HZ3IopbqCCtrKt9I"
 
@@ -37,12 +44,66 @@ interface UserManagementService {
 
     @Headers("apikey: $API_KEY", "Content-Type: application/json")
     @POST("auth/v1/recover")
-    suspend fun resetPassword(@Body body: Map<String, String>): Response<Unit>
+    suspend fun resetPassword(@Body body: MutableMap<String, String>): Response<String>
 
     @Headers("apikey: $API_KEY", "Content-Type: application/json")
     @PUT("auth/v1/user")
     suspend fun updatePassword(
         @Header("Authorization") bearerToken: String,
-        @Body body: Map<String, String>
-    ): Response<Unit>
+        @Body body: MutableMap<String, String>
+    ): Response<String>
+
+    @GET("rest/v1/profiles")
+    suspend fun getProfile(
+        @Query("user_id") userIdQuery: String,
+        @Header("Authorization") token: String,
+        @Header("apikey") apiKey: String
+    ): Response<List<UserProfile>>
+
+    @POST("rest/v1/profiles")
+    suspend fun createProfile(
+        @Body profile: MutableMap<String, String?>,
+        @Header("Authorization") token: String,
+        @Header("apikey") apiKey: String,
+        @Header("Prefer") prefer: String = "return=minimal"
+    ): Response<String>
+
+    @PATCH("rest/v1/profiles")
+    suspend fun updateProfile(
+        @Query("user_id") userIdQuery: String,
+        @Body profile: MutableMap<String, String?>,
+        @Header("Authorization") token: String,
+        @Header("apikey") apiKey: String
+    ): Response<String>
+
+    @GET("rest/v1/products")
+    suspend fun getProducts(
+        @Header("apikey") apiKey: String = API_KEY
+    ): Response<List<ProductDto>>
+
+    @GET("rest/v1/products")
+    suspend fun getProductById(
+        @Query("id") idFilter: String,
+        @Header("apikey") apiKey: String = API_KEY
+    ): Response<List<ProductDto>>
+
+    @GET("rest/v1/favourite")
+    suspend fun getFavouriteForUser(
+        @Query("user_id") userFilter: String,
+        @Header("apikey") apiKey: String = API_KEY
+    ): Response<List<FavouriteDto>>
+
+    @POST("rest/v1/favourite")
+    suspend fun addToFavourite(
+        @Body body: MutableMap<String, Any>,
+        @Header("apikey") apiKey: String = API_KEY,
+        @Header("Prefer") prefer: String = "return=minimal"
+    ): Response<String>
+
+    @DELETE("rest/v1/favourite")
+    suspend fun removeFromFavourite(
+        @Query("user_id") userFilter: String,
+        @Query("product_id") productFilter: String,
+        @Header("apikey") apiKey: String = API_KEY
+    ): Response<String>
 }
