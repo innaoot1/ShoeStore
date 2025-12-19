@@ -26,6 +26,7 @@ import com.example.shoestore.ui.theme.ShoeShopTheme
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 import com.example.shoestore.R
+
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardScreen(
@@ -58,21 +59,16 @@ fun OnboardScreen(
         )
     )
 
-    val pagerState = rememberPagerState(initialPage = 0)
+    var currentPage by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize     ()) {
-        HorizontalPager(
-            count = slides.size,
-            state = pagerState,
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Show current slide only
+        OnboardingSlideItem(
+            slide = slides[currentPage],
+            isFirstSlide = currentPage == 0,
             modifier = Modifier.fillMaxSize()
-        ) { page ->
-            OnboardingSlideItem(
-                slide = slides[page],
-                isFirstSlide = page == 0,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+        )
 
         Box(
             modifier = Modifier
@@ -106,9 +102,9 @@ fun OnboardScreen(
             ) {
                 repeat(slides.size) { index ->
                     val size = animateDpAsState(
-                        targetValue = if (pagerState.currentPage == index) 12.dp else 8.dp
+                        targetValue = if (currentPage == index) 12.dp else 8.dp
                     )
-                    val dotColor = if (pagerState.currentPage == index) {
+                    val dotColor = if (currentPage == index) {
                         Color.White
                     } else {
                         Color.White.copy(alpha = 0.5f)
@@ -124,21 +120,12 @@ fun OnboardScreen(
             }
 
             OnboardButtun(
-                text = slides[pagerState.currentPage].buttonText,
+                text = slides[currentPage].buttonText,
                 onClick = {
-                    if (!pagerState.isScrollInProgress) {
-                        if (pagerState.currentPage == slides.size - 1) {
-                            onGetStartedClick()
-                        } else {
-                            coroutineScope.launch {
-                                val next = (pagerState.currentPage + 1).coerceAtMost(slides.size - 1)
-                                try {
-                                    pagerState.animateScrollToPage(next)
-                                } catch (e: Exception) {
-                                    pagerState.scrollToPage(next)
-                                }
-                            }
-                        }
+                    if (currentPage == slides.size - 1) {
+                        onGetStartedClick()
+                    } else {
+                        currentPage = (currentPage + 1).coerceAtMost(slides.size - 1)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -147,6 +134,7 @@ fun OnboardScreen(
     }
 }
 
+// Остальные composable функции остаются без изменений
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardingSlideItem(
@@ -194,7 +182,6 @@ private fun FirstSlideContent(slide: OnboardingSlide) {
             .padding(horizontal = 24.dp, vertical = 20.dp),
         contentAlignment = Alignment.Center
     ) {
-
         Image(
             painter = painterResource(id = slide.imageRes),
             contentDescription = slide.title,
@@ -203,7 +190,6 @@ private fun FirstSlideContent(slide: OnboardingSlide) {
                 .padding(16.dp),
             contentScale = ContentScale.Fit
         )
-
     }
 }
 
