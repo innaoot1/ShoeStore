@@ -2,7 +2,6 @@ package com.example.shoestore.ui.screens
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -31,6 +30,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoestore.R
 import com.example.shoestore.ui.components.BackButton
+import com.example.shoestore.ui.components.DisableButton
 import com.example.shoestore.data.model.SignUpRequest
 import com.example.shoestore.ui.components.AlertDialogWithTwoButtons
 import com.example.shoestore.ui.theme.AppTypography
@@ -52,9 +52,10 @@ fun RegisterAccountScreen(
     var isChecked by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-    var isSigningUp by remember { mutableStateOf(false) }
+    var pendingSignUpRequest by remember { mutableStateOf<SignUpRequest?>(null) }
 
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val signUpState by viewModel.signUpState.collectAsStateWithLifecycle()
 
     val sharedPreferences = remember {
@@ -64,18 +65,26 @@ fun RegisterAccountScreen(
     LaunchedEffect(signUpState) {
         when (signUpState) {
             is SignUpState.Success -> {
-                Log.d("RegisterScreen", "SignUp Success")
                 saveUserDataToPreferences(sharedPreferences, name, email)
-                isSigningUp = false
                 onSignUpClick()
                 viewModel.resetState()
             }
             is SignUpState.Error -> {
                 val error = (signUpState as SignUpState.Error)
                 errorMessage = error.message
-                Log.e("RegisterScreen", "SignUp Error: ${error.message}")
-                showErrorDialog = true
-                isSigningUp = false
+
+                val showDialog = when {
+                    error.message.contains("Too many requests", ignoreCase = true) -> true
+                    error.message.contains("rate limit", ignoreCase = true) -> true
+                    error.message.contains("network", ignoreCase = true) -> true
+                    error.message.contains("invalid", ignoreCase = true) -> true
+                    else -> true
+                }
+
+                if (showDialog) {
+                    showErrorDialog = true
+                } else {
+                }
                 viewModel.resetState()
             }
             else -> {}
@@ -91,10 +100,12 @@ fun RegisterAccountScreen(
         onConfirm = {
             showErrorDialog = false
             errorMessage = ""
+            pendingSignUpRequest = null
         },
         onCancel = {
             showErrorDialog = false
             errorMessage = ""
+            pendingSignUpRequest = null
         },
         title = stringResource(R.string.details),
         message = errorMessage,
@@ -324,57 +335,27 @@ fun RegisterAccountScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        DisableButton(
+            text = stringResource(id = R.string.sign_up),
             onClick = {
-                if (isSigningUp) {
-                    Log.d("RegisterScreen", "Already signing up, ignoring click")
-                    return@Button
-                }
-
-                Log.d("RegisterScreen", "Form validation: name=$name, email=$email, password=$password, isChecked=$isChecked")
-
-                when {
-                    name.trim().isEmpty() -> {
-                        errorMessage = "Please enter your name"
-                        showErrorDialog = true
+                if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && isChecked) {
+                    val signUpRequest = SignUpRequest(email, password)
+                    pendingSignUpRequest = signUpRequest
+                    viewModel.signUp(signUpRequest)
+                } else {
+                    errorMessage = when {
+                        name.isEmpty() -> "Please enter your name"
+                        email.isEmpty() -> "Please enter your email address"
+                        password.isEmpty() -> "Please enter your password"
+                        !isChecked -> "Please accept the terms and conditions"
+                        else -> "Please fill in all required fields"
                     }
-                    email.trim().isEmpty() -> {
-                        errorMessage = "Please enter your email address"
-                        showErrorDialog = true
-                    }
-                    password.trim().isEmpty() -> {
-                        errorMessage = "Please enter your password"
-                        showErrorDialog = true
-                    }
-                    !isChecked -> {
-                        errorMessage = "Please accept the terms and conditions"
-                        showErrorDialog = true
-                    }
-                    else -> {
-                        Log.d("RegisterScreen", "Starting sign up with email: $email")
-                        isSigningUp = true
-                        val signUpRequest = SignUpRequest(email.trim(), password.trim())
-                        viewModel.signUp(signUpRequest)
-                    }
+                    showErrorDialog = true
                 }
             },
-            enabled = name.trim().isNotEmpty() && email.trim().isNotEmpty() && password.trim().isNotEmpty() && isChecked && !isSigningUp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            shape = MaterialTheme.shapes.medium,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                disabledContainerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.background,
-                disabledContentColor = MaterialTheme.colorScheme.background
-            )
-        ) {
-            Text(
-                text = stringResource(id = R.string.sign_up),
-                style = AppTypography.bodyMedium16
-            )
-        }
+            enabled = name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && isChecked,
+            textStyle = AppTypography.bodyMedium16
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 

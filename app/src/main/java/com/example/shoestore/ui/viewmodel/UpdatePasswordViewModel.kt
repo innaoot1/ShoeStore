@@ -31,7 +31,7 @@ class UpdatePasswordViewModel : ViewModel() {
             try {
                 val response = RetrofitInstance.userManagementService.updatePassword(
                     "Bearer $token",
-                    mapOf("password" to newPassword) as MutableMap<String, String>
+                    mapOf("password" to newPassword)
                 )
                 if (response.isSuccessful) {
                     _state.value = UpdatePasswordState.Success
