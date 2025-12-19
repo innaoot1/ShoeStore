@@ -72,7 +72,7 @@ fun VerificationScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "OTP Verification",
+            text = "OTP Верификация",
             style = AppTypography.headingRegular32,
             color = Color(0xFF2B2B2B)
         )
@@ -80,7 +80,7 @@ fun VerificationScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Please check your email $email to see the verification code",
+            text = "Пожалуйста проверьте вашу почту $email посмотрите код",
             style = AppTypography.subtitleRegular16,
             color = Color(0xFF707B81),
             textAlign = TextAlign.Center
@@ -89,7 +89,7 @@ fun VerificationScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "OTP Code",
+            text = "OTP Код",
             modifier = Modifier.fillMaxWidth(),
             style = AppTypography.headingRegular32.copy(fontSize = 21.sp),
             textAlign = TextAlign.Start
@@ -159,7 +159,7 @@ fun VerificationScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Resend code",
+                text = "Повторная отправка кода",
                 style = AppTypography.bodyRegular12,
                 color = Color(0xFF707B81)
             )

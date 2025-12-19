@@ -189,14 +189,14 @@ fun EditProfileScreen(
                     onValueChange = { viewModel.phone.value = it }
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(26.dp))
 
                 Button(
                     onClick = { currentUserId?.let { viewModel.saveChanges(it) } },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF48B2E7))
                 ) {
                     Text(stringResource(R.string.save_now), color = Color.White, fontSize = 14.sp)

@@ -58,7 +58,6 @@ fun ForgotPasswordScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it; viewModel.resetState() },
-            placeholder = { Text("xyz@gmail.com") },
             modifier = Modifier.fillMaxWidth()
         )
 

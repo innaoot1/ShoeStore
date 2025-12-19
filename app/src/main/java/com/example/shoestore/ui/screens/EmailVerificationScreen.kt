@@ -144,9 +144,9 @@ fun EmailVerificationScreen(
                 if (otpCode.length == 6 && userEmail.isNotEmpty()) {
                     viewModel.verifyOtp(userEmail, otpCode)
                 } else if (userEmail.isEmpty()) {
-                    android.widget.Toast.makeText(context, "Email not found. Please sign up again.", android.widget.Toast.LENGTH_LONG).show()
+                    android.widget.Toast.makeText(context, "Адрес электронной почты не найден. Пожалуйста, зарегистрируйтесь еще раз.", android.widget.Toast.LENGTH_LONG).show()
                 } else {
-                    android.widget.Toast.makeText(context, "Please enter 6-digit OTP code", android.widget.Toast.LENGTH_LONG).show()
+                    android.widget.Toast.makeText(context, "Пожалуйста, введите 6-значный OTP-код", android.widget.Toast.LENGTH_LONG).show()
                 }
             },
             textStyle = AppTypography.bodyMedium16

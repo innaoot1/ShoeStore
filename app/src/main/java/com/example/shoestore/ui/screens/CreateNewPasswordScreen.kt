@@ -97,7 +97,7 @@ fun CreateNewPasswordScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(stringResource(R.string.confirm_password), style = AppTypography.bodyMedium16, color = Text)
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = {
@@ -105,7 +105,7 @@ fun CreateNewPasswordScreen(
                 errorMessage = null
             },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(14.dp),
+            shape = RoundedCornerShape(16.dp),
             isError = errorMessage != null,
             visualTransformation = if (isConfirmVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {

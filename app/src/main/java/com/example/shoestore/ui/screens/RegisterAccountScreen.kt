@@ -135,7 +135,8 @@ fun RegisterAccountScreen(
                 text = stringResource(id = R.string.register),
                 style = AppTypography.headingRegular32,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                    .padding(horizontal = 16.dp)
             )
 
             Text(
@@ -150,19 +151,13 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.name),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 16.dp)
         )
 
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            placeholder = {
-                Text(
-                    "xxxxxxxx",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
@@ -186,19 +181,13 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.email),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 16.dp)
         )
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = {
-                Text(
-                    "......@mail.com",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
@@ -223,19 +212,13 @@ fun RegisterAccountScreen(
             text = stringResource(id = R.string.pass),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 16.dp)
         )
 
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = {
-                Text(
-                    "......",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             visualTransformation = if (passwordVisible) {
                 VisualTransformation.None
             } else {
@@ -327,7 +310,7 @@ fun RegisterAccountScreen(
 
             Text(
                 text = stringResource(id = R.string.agree),
-                style = AppTypography.bodyRegular14,
+                style = AppTypography.bodyMedium16,
                 color = hintColor,
                 modifier = Modifier.weight(1f)
             )
@@ -344,11 +327,11 @@ fun RegisterAccountScreen(
                     viewModel.signUp(signUpRequest)
                 } else {
                     errorMessage = when {
-                        name.isEmpty() -> "Please enter your name"
-                        email.isEmpty() -> "Please enter your email address"
-                        password.isEmpty() -> "Please enter your password"
-                        !isChecked -> "Please accept the terms and conditions"
-                        else -> "Please fill in all required fields"
+                        name.isEmpty() -> "Пожалуйста введмите ваше имя"
+                        email.isEmpty() -> "Пожалуйста введите вашу почту"
+                        password.isEmpty() -> "Пожалуйста введите пароль"
+                        !isChecked -> "Пожалуйста, примите настоящие правила и условия"
+                        else -> "Пожалуйста, заполните все обязательные поля"
                     }
                     showErrorDialog = true
                 }

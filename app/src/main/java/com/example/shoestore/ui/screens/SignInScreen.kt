@@ -102,7 +102,8 @@ fun SignInScreen(
                 text = stringResource(id = R.string.hello),
                 style = AppTypography.headingRegular32,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                    .padding(horizontal = 16.dp)
             )
 
             Text(
@@ -117,19 +118,13 @@ fun SignInScreen(
             text = stringResource(id = R.string.email),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 16.dp)
         )
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = {
-                Text(
-                    "......@mail.com",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
@@ -154,19 +149,13 @@ fun SignInScreen(
             text = stringResource(id = R.string.pass),
             style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 16.dp)
         )
 
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = {
-                Text(
-                    "......",
-                    style = AppTypography.bodyRegular14,
-                    color = hintColor
-                )
-            },
             visualTransformation = if (passwordVisible) {
                 VisualTransformation.None
             } else {
@@ -220,7 +209,7 @@ fun SignInScreen(
             style = AppTypography.bodyRegular12,
             color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = 16.dp)
                     .clickable { onForgotPasswordClick() }
                     )
         }
@@ -232,7 +221,7 @@ fun SignInScreen(
             onClick = { if (email.isNotEmpty() && password.isNotEmpty()) {
                 viewModel.signIn(email, password)
             } else {
-                errorMessage = "Please fill in all fields"
+                errorMessage = "Пожалуйста, заполните все поля"
                 showErrorDialog = true
             } },
             textStyle = AppTypography.bodyMedium16

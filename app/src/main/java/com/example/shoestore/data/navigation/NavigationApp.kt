@@ -83,20 +83,13 @@ fun NavigationApp(
 
         composable("home") {
             HomeScreen(
-                onProductClick = { product ->
-                    navController.navigate("details/${product.id}")
-                },
                 onCartClick = { },
-                onSearchClick = { },
                 onSettingsClick = { },
                 onProfileEditClick = { navController.navigate("edit_profile") },
                 onProfileLogoutClick = {
                     navController.navigate("sign_in") {
                         popUpTo("home") { inclusive = true }
                     }
-                },
-                onOpenCatalog = {
-                    navController.navigate("catalog")
                 }
             )
         }
@@ -117,26 +110,6 @@ fun NavigationApp(
             EditProfileScreen(
                 onBackClick = { navController.popBackStack() },
                 onSaveSuccess = { navController.popBackStack() }
-            )
-        }
-
-        composable("catalog") {
-            CatalogScreen(
-                onProductClick = { product ->
-                    navController.navigate("details/${product.id}")
-                }
-            )
-        }
-
-        composable(
-            route = "details/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("productId") ?: ""
-            ProductDetailsScreen(
-                productId = productId,
-                onBackClick = { navController.popBackStack() },
-                onCartClick = { }
             )
         }
     }

@@ -35,12 +35,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,36 +51,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoestore.R
 import com.example.shoestore.data.model.Category
-import com.example.shoestore.data.model.Product
-import com.example.shoestore.ui.components.ProductCard
 import com.example.shoestore.ui.theme.AppTypography
 import com.example.shoestore.ui.theme.ShoeShopTheme
-import com.example.shoestore.ui.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onProductClick: (Product) -> Unit,
     onCartClick: () -> Unit,
-    onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit = {},
     onProfileEditClick: () -> Unit = {},
-    onProfileLogoutClick: () -> Unit = {},
-    onOpenCatalog: () -> Unit = {},
-    viewModel: HomeViewModel = viewModel()
+    onProfileLogoutClick: () -> Unit = {}
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var selectedCategory by remember { mutableStateOf("All") }
-
-    val popularProducts by viewModel.popularProductsFlow.collectAsState()
-    val isLoading by viewModel.isLoadingFlow.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.loadPopularProducts()
-    }
 
     val categories = listOf(
         Category("All"),
@@ -91,10 +74,6 @@ fun HomeScreen(
         Category("Men"),
         Category("Women")
     )
-
-    val filteredPopular =
-        if (selectedCategory == "All") popularProducts
-        else popularProducts.filter { it.category == selectedCategory }
 
     ShoeShopTheme {
         Scaffold(
@@ -187,110 +166,12 @@ fun HomeScreen(
                     .background(Color(0xFFF7F7F9))
             ) {
                 when (selectedTab) {
-                    0 -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.home),
-                                style = AppTypography.headingRegular32,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 12.dp),
-                                textAlign = TextAlign.Center
-                            )
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .height(48.dp)
-                                        .clip(RoundedCornerShape(12.dp))
-                                        .background(Color.White)
-                                ) {
-                                    OutlinedTextField(
-                                        value = "",
-                                        onValueChange = {},
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(48.dp),
-                                        placeholder = {
-                                            Text(
-                                                text = stringResource(R.string.search),
-                                                style = AppTypography.bodyRegular14
-                                            )
-                                        },
-                                        leadingIcon = {
-                                            Icon(
-                                                imageVector = Icons.Default.Search,
-                                                contentDescription = stringResource(R.string.search),
-                                                tint = Color.Gray
-                                            )
-                                        },
-                                        shape = RoundedCornerShape(12.dp),
-                                        colors = OutlinedTextFieldDefaults.colors(
-                                            focusedBorderColor = Color.Transparent,
-                                            unfocusedBorderColor = Color.Transparent,
-                                            focusedContainerColor = Color.White,
-                                            unfocusedContainerColor = Color.White
-                                        )
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.width(12.dp))
-
-                                Box(
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                        .clip(CircleShape)
-                                        .background(MaterialTheme.colorScheme.primary)
-                                        .clickable { onSettingsClick() },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.sliders),
-                                        contentDescription = stringResource(R.string.settings),
-                                        tint = Color.White,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            }
-                        }
-
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            item {
-                                CategorySection(
-                                    categories = categories,
-                                    selectedCategory = selectedCategory,
-                                    onCategorySelected = { selectedCategory = it }
-                                )
-                            }
-
-                            item {
-                                PopularSection(
-                                    isLoading = isLoading,
-                                    products = filteredPopular,
-                                    onProductClick = onProductClick,
-                                    onFavoriteClick = {},
-                                    onOpenCatalog = onOpenCatalog
-                                )
-                            }
-
-                            item {
-                                PromotionsSection()
-                            }
-                        }
-                    }
-
+                    0 -> HomeTabContent(
+                        categories = categories,
+                        selectedCategory = selectedCategory,
+                        onCategorySelected = { selectedCategory = it },
+                        onSettingsClick = onSettingsClick
+                    )
                     1 -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -302,7 +183,6 @@ fun HomeScreen(
                             )
                         }
                     }
-
                     2 -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -314,7 +194,6 @@ fun HomeScreen(
                             )
                         }
                     }
-
                     3 -> {
                         ProfileScreen(
                             onEditClick = onProfileEditClick,
@@ -325,6 +204,104 @@ fun HomeScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HomeTabContent(
+    categories: List<Category>,
+    selectedCategory: String,
+    onCategorySelected: (String) -> Unit,
+    onSettingsClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.home),
+            style = AppTypography.headingRegular32,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            textAlign = TextAlign.Center
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White)
+            ) {
+                OutlinedTextField(
+                    value = "",
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.search),
+                            style = AppTypography.bodyRegular14
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = stringResource(R.string.search),
+                            tint = Color.Gray
+                        )
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .clickable { onSettingsClick() },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.sliders),
+                    contentDescription = stringResource(R.string.settings),
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        item {
+            CategorySection(
+                categories = categories,
+                selectedCategory = selectedCategory,
+                onCategorySelected = onCategorySelected
+            )
+        }
+        item { PopularSection() }
+        item { PromotionsSection() }
     }
 }
 
@@ -374,13 +351,7 @@ private fun CategoryChip(
 }
 
 @Composable
-private fun PopularSection(
-    isLoading: Boolean,
-    products: List<Product>,
-    onProductClick: (Product) -> Unit,
-    onFavoriteClick: (Product) -> Unit,
-    onOpenCatalog: () -> Unit
-) {
+private fun PopularSection() {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -392,44 +363,32 @@ private fun PopularSection(
                 style = AppTypography.bodyMedium16
             )
             Text(
-                text = stringResource(id = R.string.all),
+                text = "Coming soon",
                 style = AppTypography.bodyRegular12,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable { onOpenCatalog() }
+                color = MaterialTheme.colorScheme.primary
             )
         }
-
         Spacer(modifier = Modifier.height(12.dp))
-
-        when {
-            isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            products.isEmpty() -> {
-                Text(
-                    text = stringResource(R.string.popular_empty),
-                    style = AppTypography.bodyRegular14
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(140.dp)
+                .background(Color.White, RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
                 )
-            }
-
-            else -> {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    items(products) { product ->
-                        ProductCard(
-                            product = product,
-                            onProductClick = { onProductClick(product) },
-                            onFavoriteClick = { onFavoriteClick(product) }
-                        )
-                    }
-                }
+                Text(
+                    text = "Popular products coming soon",
+                    style = AppTypography.bodyRegular16,
+                    color = Color.Gray
+                )
             }
         }
     }

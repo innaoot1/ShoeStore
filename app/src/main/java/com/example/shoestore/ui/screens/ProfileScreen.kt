@@ -58,13 +58,13 @@ fun ProfileScreen(
                             .padding(end = 8.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(Color(0xFF48B2E7))
-                            .size(32.dp)
+                            .size(50.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Редактировать",
                             tint = Color.White,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 },
@@ -149,10 +149,11 @@ fun ReadOnlyField(label: String, value: String) {
     Column(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
         Text(
             text = label,
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = Color.Black.copy(alpha = 0.8f),
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 20.dp, top = 10.dp)
+                .padding(horizontal = 16.dp)
         )
         Box(
             modifier = Modifier
