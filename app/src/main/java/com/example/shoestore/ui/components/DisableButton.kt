@@ -30,8 +30,8 @@ fun DisableButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             disabledContainerColor = MaterialTheme.colorScheme.secondary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,  // ← Изменил
-            disabledContentColor = MaterialTheme.colorScheme.onSecondary  // ← Изменил
+            contentColor = MaterialTheme.colorScheme.background,
+            disabledContentColor = MaterialTheme.colorScheme.background
         )
     ) {
         Text(

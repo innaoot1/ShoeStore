@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CatalogViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
 
     private val api = RetrofitInstance.userManagementService
 
-    private val products = MutableStateFlow<List<Product>>(emptyList())
-    val productsFlow = products.asStateFlow()
+    private val popularProducts = MutableStateFlow<List<Product>>(emptyList())
+    val popularProductsFlow = popularProducts.asStateFlow()
 
     private val isLoading = MutableStateFlow(false)
     val isLoadingFlow = isLoading.asStateFlow()
@@ -24,15 +24,17 @@ class CatalogViewModel : ViewModel() {
     private val error = MutableStateFlow<String?>(null)
     val errorFlow = error.asStateFlow()
 
-    fun loadCatalog() {
+    fun loadPopularProducts() {
         viewModelScope.launch {
             isLoading.value = true
             error.value = null
             try {
                 val response = api.getProducts()
                 if (response.isSuccessful) {
-                    val list = response.body().orEmpty()
-                    products.value = list.map { it.toUi() }
+                    val allProducts = response.body().orEmpty()
+                    val bestSellers = allProducts.filter { it.isBestSeller == true }
+                    val result = if (bestSellers.isEmpty()) allProducts else bestSellers
+                    popularProducts.value = result.map { it.toUi() }
                 } else {
                     error.value = response.code().toString()
                 }

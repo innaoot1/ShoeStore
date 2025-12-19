@@ -10,7 +10,6 @@ import com.example.shoestore.data.model.SignUpRequest
 import com.example.shoestore.data.RetrofitInstance
 
 class SignUpViewModel : ViewModel() {
-
     private val _signUpState = MutableStateFlow<SignUpState>(SignUpState.Idle)
     val signUpState: StateFlow<SignUpState> = _signUpState
 
@@ -18,7 +17,6 @@ class SignUpViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstance.userManagementService.signUp(signUpRequest)
-
                 if (response.isSuccessful) {
                     response.body()?.let {
                         Log.v("signUp", "User id: ${it.id}")

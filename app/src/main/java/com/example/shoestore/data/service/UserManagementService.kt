@@ -20,7 +20,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
-const val API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1dGpkZ2dpem92aWJtemphdm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MTA4MTcsImV4cCI6MjA4MDE4NjgxN30.2S7E8a_guM1LnmJmk9jKefcfZE4HZ3IopbqCCtrKt9I"
+const val API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzYnhteHBocnZkbHdsb3Fjb2xsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNTQyNTEsImV4cCI6MjA4MTczMDI1MX0.0tF0Hy1lfGu9EodfsTKFCV9DTEhzrlO5UOR7IvJr30E"
 
 interface UserManagementService {
 
@@ -44,14 +44,14 @@ interface UserManagementService {
 
     @Headers("apikey: $API_KEY", "Content-Type: application/json")
     @POST("auth/v1/recover")
-    suspend fun resetPassword(@Body body: MutableMap<String, String>): Response<String>
+    suspend fun resetPassword(@Body body: Map<String, String>): Response<Unit>
 
     @Headers("apikey: $API_KEY", "Content-Type: application/json")
     @PUT("auth/v1/user")
     suspend fun updatePassword(
         @Header("Authorization") bearerToken: String,
-        @Body body: MutableMap<String, String>
-    ): Response<String>
+        @Body body: Map<String, String>
+    ): Response<Unit>
 
     @GET("rest/v1/profiles")
     suspend fun getProfile(
@@ -62,19 +62,19 @@ interface UserManagementService {
 
     @POST("rest/v1/profiles")
     suspend fun createProfile(
-        @Body profile: MutableMap<String, String?>,
+        @Body profile: Map<String, String?>,
         @Header("Authorization") token: String,
         @Header("apikey") apiKey: String,
         @Header("Prefer") prefer: String = "return=minimal"
-    ): Response<String>
+    ): Response<Unit>
 
     @PATCH("rest/v1/profiles")
     suspend fun updateProfile(
         @Query("user_id") userIdQuery: String,
-        @Body profile: MutableMap<String, String?>,
+        @Body profile: Map<String, String?>,
         @Header("Authorization") token: String,
         @Header("apikey") apiKey: String
-    ): Response<String>
+    ): Response<Unit>
 
     @GET("rest/v1/products")
     suspend fun getProducts(
@@ -95,15 +95,16 @@ interface UserManagementService {
 
     @POST("rest/v1/favourite")
     suspend fun addToFavourite(
-        @Body body: MutableMap<String, Any>,
+        @Body body: Map<String, String>,
         @Header("apikey") apiKey: String = API_KEY,
         @Header("Prefer") prefer: String = "return=minimal"
-    ): Response<String>
+    ): Response<Unit>
 
     @DELETE("rest/v1/favourite")
     suspend fun removeFromFavourite(
         @Query("user_id") userFilter: String,
         @Query("product_id") productFilter: String,
         @Header("apikey") apiKey: String = API_KEY
-    ): Response<String>
+    ): Response<Unit>
+
 }
