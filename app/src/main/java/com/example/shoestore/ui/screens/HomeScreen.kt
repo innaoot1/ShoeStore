@@ -1,21 +1,10 @@
+// ui/screens/HomeScreen.kt
 package com.example.shoestore.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -23,24 +12,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,8 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.shoestore.R
 import com.example.shoestore.data.model.Category
+import com.example.shoestore.data.model.Product
+import com.example.shoestore.ui.components.ProductCard
 import com.example.shoestore.ui.theme.AppTypography
 import com.example.shoestore.ui.theme.ShoeShopTheme
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,17 +39,77 @@ fun HomeScreen(
     onCartClick: () -> Unit,
     onSettingsClick: () -> Unit = {},
     onProfileEditClick: () -> Unit = {},
-    onProfileLogoutClick: () -> Unit = {}
+    onProfileLogoutClick: () -> Unit = {},
+    onProductClick: (String) -> Unit = {} // Обратите внимание: теперь String вместо UUID
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var selectedCategory by remember { mutableStateOf("All") }
 
+    // Тестовые данные для демонстрации
     val categories = listOf(
         Category("All"),
         Category("Outdoor"),
         Category("Tennis"),
         Category("Men"),
         Category("Women")
+    )
+
+    // Тестовые продукты
+    val testProducts = listOf(
+        Product(
+            id = "1",
+            name = "PUMA CA Pro Classic",
+            price = "13999 ₽",
+            originalPrice = "15999 ₽",
+            category = "BEST SELLER",
+            description = "Ретро-кроссовки в стиле баскетбола",
+            imageResId = R.drawable._e9c9924_7000_4e7b_8332_33bd8d0bd9b6_f8f32b
+        ),
+        Product(
+            id = "2",
+            name = "STREETBEAT Plimsoll Retro",
+            price = "8499 ₽",
+            originalPrice = "9999 ₽",
+            category = "NEW",
+            description = "Ностальгические кеды в стиле ретро",
+            imageResId = R.drawable._e9c9924_7000_4e7b_8332_33bd8d0bd9b6_f8f32b
+        ),
+        Product(
+            id = "3",
+            name = "Adidas Niteball",
+            price = "19499 ₽",
+            originalPrice = "21999 ₽",
+            category = "BEST SELLER",
+            description = "Беговые кроссовки с инновационной амортизацией",
+            imageResId = R.drawable._e9c9924_7000_4e7b_8332_33bd8d0bd9b6_f8f32b
+        ),
+        Product(
+            id = "4",
+            name = "PUMA Velophasis Phased",
+            price = "16999 ₽",
+            originalPrice = "18999 ₽",
+            category = "NEW",
+            description = "Минималистичные повседневные кроссовки",
+            imageResId = R.drawable._e9c9924_7000_4e7b_8332_33bd8d0bd9b6_f8f32b
+        ),
+        Product(
+            id = "5",
+            name = "HUGO Leon Run",
+            price = "19999 ₽",
+            originalPrice = "22999 ₽",
+            category = "BEST SELLER",
+            description = "Кроссовки в уличном стиле",
+            imageResId = R.drawable._e9c9924_7000_4e7b_8332_33bd8d0bd9b6_f8f32b
+        ),
+        Product(
+            id = "6",
+            name = "Adidas Ozmillen",
+            price = "20599 ₽",
+            originalPrice = "23999 ₽",
+            category = "NEW",
+            description = "Легкие и дышащие беговые кроссовки",
+            imageResId = R.drawable._e9c9924_7000_4e7b_8332_33bd8d0bd9b6_f8f32b
+        )
     )
 
     ShoeShopTheme {
@@ -170,7 +207,9 @@ fun HomeScreen(
                         categories = categories,
                         selectedCategory = selectedCategory,
                         onCategorySelected = { selectedCategory = it },
-                        onSettingsClick = onSettingsClick
+                        onSettingsClick = onSettingsClick,
+                        products = testProducts,
+                        onProductClick = onProductClick
                     )
                     1 -> {
                         Box(
@@ -212,7 +251,9 @@ private fun HomeTabContent(
     categories: List<Category>,
     selectedCategory: String,
     onCategorySelected: (String) -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    products: List<Product>,
+    onProductClick: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -300,7 +341,21 @@ private fun HomeTabContent(
                 onCategorySelected = onCategorySelected
             )
         }
-        item { PopularSection() }
+
+        item {
+            PopularSection(
+                products = products.filter { it.category == "BEST SELLER" },
+                onProductClick = onProductClick
+            )
+        }
+
+        item {
+            AllProductsSection(
+                products = products,
+                onProductClick = onProductClick
+            )
+        }
+
         item { PromotionsSection() }
     }
 }
@@ -351,7 +406,10 @@ private fun CategoryChip(
 }
 
 @Composable
-private fun PopularSection() {
+private fun PopularSection(
+    products: List<Product>,
+    onProductClick: (String) -> Unit
+) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -363,32 +421,123 @@ private fun PopularSection() {
                 style = AppTypography.bodyMedium16
             )
             Text(
-                text = "Coming soon",
+                text = "Все",
                 style = AppTypography.bodyRegular12,
                 color = MaterialTheme.colorScheme.primary
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .background(Color.White, RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+
+        if (products.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .background(Color.White, RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(32.dp)
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(32.dp)
+                    )
+                    Text(
+                        text = "Популярные товары",
+                        style = AppTypography.bodyRegular16,
+                        color = Color.Gray
+                    )
+                }
+            }
+        } else {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(products) { product ->
+                    ProductCard(
+                        product = product,
+                        onProductClick = { onProductClick(product.id) },
+                        onFavoriteClick = {
+                            // Обработка добавления/удаления из избранного
+                            println("Избранное: ${product.name}")
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AllProductsSection(
+    products: List<Product>,
+    onProductClick: (String) -> Unit
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Все товары",
+                style = AppTypography.bodyMedium16
+            )
+            Text(
+                text = "${products.size} товаров",
+                style = AppTypography.bodyRegular12,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (products.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(Color.White, RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
-                    text = "Popular products coming soon",
+                    text = "Товары не найдены",
                     style = AppTypography.bodyRegular16,
                     color = Color.Gray
                 )
+            }
+        } else {
+            // Используем FlowRow или Grid для отображения сетки
+            // Покажем в виде горизонтальных рядов
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Разделим товары на пары для отображения в 2 колонки
+                products.chunked(2).forEach { rowProducts ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        rowProducts.forEach { product ->
+                            Box(modifier = Modifier.weight(1f)) {
+                                ProductCard(
+                                    product = product,
+                                    onProductClick = { onProductClick(product.id) },
+                                    onFavoriteClick = {
+                                        // Обработка добавления/удаления из избранного
+                                        println("Избранное: ${product.name}")
+                                    }
+                                )
+                            }
+                        }
+                        // Если в ряду только один товар, добавляем пустой Box для выравнивания
+                        if (rowProducts.size == 1) {
+                            Box(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
             }
         }
     }

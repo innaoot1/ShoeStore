@@ -1,10 +1,6 @@
 package com.example.shoestore.ui.screens
 
-import android.Manifest
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,24 +64,6 @@ fun EditProfileScreen(
         }
     }
 
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicturePreview()
-    ) { bitmap ->
-        if (bitmap != null) {
-            viewModel.setProfilePhoto(bitmap)
-        }
-    }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            cameraLauncher.launch()
-        } else {
-            Toast.makeText(context, "Нужен доступ к камере", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -125,8 +103,7 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
-                        .background(Color.LightGray)
-                        .clickable { permissionLauncher.launch(Manifest.permission.CAMERA) },
+                        .background(Color.LightGray),
                     contentAlignment = Alignment.Center
                 ) {
                     if (!photoBase64.isNullOrEmpty()) {
@@ -155,15 +132,6 @@ fun EditProfileScreen(
                     text = "$firstName $lastName",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = stringResource(R.string.change_profile_picture),
-                    color = Color(0xFF48B2E7),
-                    fontSize = 12.sp,
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .clickable { permissionLauncher.launch(Manifest.permission.CAMERA) }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
